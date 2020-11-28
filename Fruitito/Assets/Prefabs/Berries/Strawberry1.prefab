@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1372416053256009002
+--- !u!1 &5246487247358256517
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 210965579231034215}
-  - component: {fileID: 6073613994672084857}
-  - component: {fileID: 4703648736844300694}
-  - component: {fileID: -2160060449970147519}
+  - component: {fileID: 740159259669133849}
+  - component: {fileID: 7427589647319532484}
+  - component: {fileID: -7246073054705539147}
+  - component: {fileID: -3320400223471572467}
   m_Layer: 0
-  m_Name: Blueberry1
-  m_TagString: Blueberry
+  m_Name: Strawberry1
+  m_TagString: Straweberry
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &210965579231034215
+--- !u!4 &740159259669133849
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372416053256009002}
+  m_GameObject: {fileID: 5246487247358256517}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.51, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 2.2, z: 0}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6073613994672084857
+--- !u!212 &7427589647319532484
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372416053256009002}
+  m_GameObject: {fileID: 5246487247358256517}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -73,47 +73,54 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 097320df60618d049a1e6a3bb8153daa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2d5b013b98cf9c74092597051a969552, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.23, y: 1.26}
+  m_Size: {x: 1.87, y: 2.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4703648736844300694
+--- !u!58 &-7246073054705539147
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372416053256009002}
+  m_GameObject: {fileID: 5246487247358256517}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.7
---- !u!114 &-2160060449970147519
+  m_Radius: 1.1249999
+--- !u!114 &-3320400223471572467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372416053256009002}
+  m_GameObject: {fileID: 5246487247358256517}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e39cc025b960de04b9036b0b7ec0609b, type: 3}
+  m_Script: {fileID: 11500000, guid: d3831f8992aad9b40beccf3e137313d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruitType: 0
+  touchParticles: {fileID: 5458950076938931964, guid: 7b5b4224586912040bf1f601cc6ac259,
+    type: 3}
+  wrongParticles: {fileID: 6136441901409357357, guid: e80b301975d5cc74c84826194d3d1434,
+    type: 3}
+  fruitType: 2
   sprites:
-  - {fileID: 21300000, guid: 097320df60618d049a1e6a3bb8153daa, type: 3}
-  - {fileID: 21300000, guid: 945e202965e5c54419165745ffa3262d, type: 3}
-  - {fileID: 21300000, guid: 7c839a77d6b050a4a8862e132ff9c4c0, type: 3}
+  - {fileID: 21300000, guid: 2d5b013b98cf9c74092597051a969552, type: 3}
+  - {fileID: 21300000, guid: ae2bd71a517ff854db165cac29062950, type: 3}
+  - {fileID: 21300000, guid: c94e135edea64c84982a7889ae5be47e, type: 3}
+  berryVFXMaterial: {fileID: 2100000, guid: f15ffc45681d69140a8476316107a52d, type: 2}
+  gameManager: {fileID: 5848297791191345294, guid: 8d50b95f44d23454fa29787e9d0e06c4,
+    type: 3}

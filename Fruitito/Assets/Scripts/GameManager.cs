@@ -5,18 +5,22 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     
     [SerializeField]
-    private Berry berry;
+    private BerrySpawner berry;
     [SerializeField]
     private SoundManager soundManager;
     [SerializeField]
     private RectTransform barFill;
+    [SerializeField]
+    private UI UI;
+
     private Vector3 fillPosition;
     private float progressStartValue;
     private int currentBerriesCount;
 
     private const int MIN_BERRIES               = 0;
-    private const int MAX_BERRIES               = 10;
+    private const int MAX_BERRIES               = 2;
     private const float PROGRESS_BAR_END_VALUE  = 0f;
+    private const float DELAY                   = 1f;
     private const string BACKGROUND_SOUND       = "Background";
     private const string WIN_SOUND              = "Win";
     private const string COLLECT_SOUND          = "Collect";
@@ -26,20 +30,18 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
-        }
-
-        progressStartValue = - barFill.rect.width;
-        currentBerriesCount = MIN_BERRIES;
-        IncreaseProgress(currentBerriesCount);
+        }   
     }
 
     private void Start()
     {
+        progressStartValue = -barFill.rect.width;
+        currentBerriesCount = MIN_BERRIES;
+        IncreaseProgress(currentBerriesCount);
         soundManager.Play(BACKGROUND_SOUND);
     }
 
@@ -50,7 +52,7 @@ public class GameManager : MonoBehaviour
 
         if(currentBerriesCount <= MAX_BERRIES)
         {
-            IncreaseProgress(currentBerriesCount);
+            IncreaseProgress(currentBerriesCount);          
         }   
     }
 
@@ -61,12 +63,18 @@ public class GameManager : MonoBehaviour
             soundManager.Stop(BACKGROUND_SOUND);
             soundManager.Play(WIN_SOUND);
             berry.StopSpawning();
+            Invoke(nameof(StartButtonAnimation), DELAY);
         }
+    }
+
+    private void StartButtonAnimation()
+    {
+        UI.CheckIfWon();
     }
 
     private void IncreaseProgress(int count)
     {
         fillPosition.x = progressStartValue + (float)count / MAX_BERRIES * (PROGRESS_BAR_END_VALUE - progressStartValue);
         barFill.localPosition = fillPosition;
-    }
+    }   
 }
