@@ -19,7 +19,7 @@ TagManager:
   - 
   - 
   - Basket
-  - 
+  - Button
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Button
+    uniqueID: 4232306101
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
