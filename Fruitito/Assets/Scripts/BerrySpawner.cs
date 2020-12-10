@@ -11,7 +11,7 @@ public class BerrySpawner : MonoBehaviour
     private Camera mainCamera;
     private int maxRandomIndex;
 
-    private const float RESPAWN_TIME        = 0.5f;
+    private const float RESPAWN_TIME        = 1.0f;
     private const float BOUNDARIES_OFFSET_X = 0.5f;
     private const float BOUNDARIES_OFFSET_Y = 1.0f;
     private const int MIN_RANDOM_INDEX      = 0;

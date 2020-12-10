@@ -16,6 +16,8 @@ public class Berry : MonoBehaviour
     private Sprite[] sprites;
     [SerializeField]
     private Material berryVFXMaterial;
+    [SerializeField]
+    private AnimationCurve animationCurve;
     private int randomSpriteIndex;
     private float startPositionX;
     private float startPositionY;
@@ -27,19 +29,25 @@ public class Berry : MonoBehaviour
     private float currentSpeedValue;
     private Vector3 initialScale;
     private float currentScaleValue;
+    private float currentScaleValue2;
     private bool correctBasket;
     private bool berryMaximized;
     private bool letGo;
-
-    private const float SCALE_SPEED         = 0.001f;
-    private const float ACCELERATION_VALUE  = 1f;
-    private const float BERRY_VFX_DELAY     = 1f;
-    private const int BERRY_Z_POSITION      = 1;
-    private const int MIN_RANDOM_INDEX      = 0;
-    private const string BASKET_LAYER       = "Basket";
-    private const string PROPERTY_TEXTURE   = "_MainTex";
-
     private Texture particleTexture;
+    private float currentTime;
+    private Vector3 mouseUpPosition;
+    private bool berrySpawned;
+    private float currentTimeForScaling;
+    private float currentTimeForMinimizing;
+
+    private const float SCALE_SPEED             = 1.7f;
+    private const float MINIMIZE_SCALE_SPEED    = 2.0f;
+    private const float RETURN_TIME             = 1.0f;
+    private const float BERRY_VFX_DELAY         = 1.0f;
+    private const int BERRY_Z_POSITION          = 1;
+    private const int MIN_RANDOM_INDEX          = 0;
+    private const string BASKET_LAYER           = "Basket";
+    private const string PROPERTY_TEXTURE       = "_MainTex";
 
     private void Start()
     {
@@ -47,7 +55,6 @@ public class Berry : MonoBehaviour
 
         letGo = false;
         onHold = false;
-        berryMaximized = false;
         correctBasket = false;
 
         maxRandomIndex = sprites.Length;
@@ -63,13 +70,12 @@ public class Berry : MonoBehaviour
 
     private void Update()
     {
-        if (!berryMaximized)
-        {
-            MaximizeBerry();
-        }        
+
+        MaximizeBerry();             
 
         if (onHold)
         {
+            currentTime = 0;
             if (!letGo)
             {
                 berryVFXMaterial.SetTexture(PROPERTY_TEXTURE, particleTexture);
@@ -85,7 +91,7 @@ public class Berry : MonoBehaviour
 
             gameObject.transform.localPosition = new Vector3(_mousePosition.x - startPositionX, _mousePosition.y - startPositionY, BERRY_Z_POSITION);
         }
-        else
+        else if(berrySpawned)
         {
             letGo = false;
             if (correctBasket)
@@ -101,6 +107,7 @@ public class Berry : MonoBehaviour
 
     private void OnMouseDown()
     {
+        berrySpawned = true;
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 _mousePosition;
@@ -116,6 +123,7 @@ public class Berry : MonoBehaviour
 
     private void OnMouseUp()
     {
+        mouseUpPosition = transform.position;
         onHold = false;
         
         Collider2D collider = Physics2D.OverlapCircle(transform.position, berryCollider.bounds.extents.x, LayerMask.GetMask(BASKET_LAYER));
@@ -144,11 +152,12 @@ public class Berry : MonoBehaviour
 
     private void ReturnBerry()
     {
-        currentSpeedValue += ACCELERATION_VALUE * Time.deltaTime; 
-
-        Vector3 _currentPosition = transform.position;
-        _currentPosition = Vector3.MoveTowards(_currentPosition, initialPosition, currentSpeedValue * Time.deltaTime);
+        var _currentPosition = transform.position;
+        currentTime += Time.deltaTime;
+        float _fraction = currentTime / RETURN_TIME;
+        _currentPosition = Vector3.Lerp(mouseUpPosition, initialPosition, _fraction);
         transform.position = _currentPosition;
+        
     }
 
     private int GetRandomIndex()
@@ -158,30 +167,25 @@ public class Berry : MonoBehaviour
 
     private void MaximizeBerry()
     {
-        if (transform.localScale.x < initialScale.x)
-        {
-            currentScaleValue += SCALE_SPEED;
-            Vector3 _currentScale = new Vector3(currentScaleValue, currentScaleValue, currentScaleValue);
-            transform.localScale = _currentScale;
-        }
-        else
-        {
-            berryMaximized = true;
-            currentScaleValue = 0;
-        }
+        currentTimeForScaling += Time.deltaTime;
+        float _fraction = currentTimeForScaling / SCALE_SPEED;
+        var _step = animationCurve.Evaluate(_fraction);
+        Vector3 _currentScale = Vector3.Lerp(Vector3.zero, initialScale, _step);
+        transform.localScale = _currentScale;
     }
 
     private void MinimizeBerry()
     {
-       if(transform.localScale.x < 0)
+       if(transform.localScale.x == 0)
        {
            Destroy(gameObject);
        }
        else
        {
-           currentScaleValue += SCALE_SPEED;
-           Vector3 _currentScale = new Vector3(initialScale.x - currentScaleValue, initialScale.y - currentScaleValue, initialScale.z - currentScaleValue);
-           transform.localScale = _currentScale;
+            currentTimeForMinimizing += Time.deltaTime;
+            float _fraction = currentTimeForMinimizing / MINIMIZE_SCALE_SPEED;
+            Vector3 _currentScale = Vector3.Lerp(initialScale, Vector3.zero, _fraction);
+            transform.localScale = _currentScale;
        }     
     }
 }

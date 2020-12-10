@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private int currentBerriesCount;
 
     private const int MIN_BERRIES               = 0;
-    private const int MAX_BERRIES               = 2;
+    private const int MAX_BERRIES               = 4;
     private const float PROGRESS_BAR_END_VALUE  = 0f;
     private const float DELAY                   = 1f;
     private const string BACKGROUND_SOUND       = "Background";

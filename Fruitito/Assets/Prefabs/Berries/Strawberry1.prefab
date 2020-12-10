@@ -122,5 +122,54 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ae2bd71a517ff854db165cac29062950, type: 3}
   - {fileID: 21300000, guid: c94e135edea64c84982a7889ae5be47e, type: 3}
   berryVFXMaterial: {fileID: 2100000, guid: f15ffc45681d69140a8476316107a52d, type: 2}
-  gameManager: {fileID: 5848297791191345294, guid: 8d50b95f44d23454fa29787e9d0e06c4,
-    type: 3}
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6993933
+      value: 0.98623145
+      inSlope: 0.11869687
+      outSlope: 0.11869687
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.28411397
+    - serializedVersion: 3
+      time: 0.85084635
+      value: 0.590332
+      inSlope: -0.12482535
+      outSlope: -0.12482535
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.45832506
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.93329847
+      value: 0.978448
+      inSlope: 0.49960414
+      outSlope: 0.49960414
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.99764156
+      inSlope: -0.17789762
+      outSlope: -0.17789762
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
