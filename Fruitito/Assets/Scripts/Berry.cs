@@ -2,22 +2,7 @@
 
 public class Berry : MonoBehaviour
 {
-    public enum FruitType
-    {
-        Blueberry, Peach, Straweberry
-    }
-    [SerializeField]
-    GameObject touchParticles;
-    [SerializeField]
-    GameObject wrongParticles;
-    [SerializeField]
-    private FruitType fruitType;
-    [SerializeField]
-    private Sprite[] sprites;
-    [SerializeField]
-    private Material berryVFXMaterial;
-    [SerializeField]
-    private AnimationCurve animationCurve;
+    public FruitData fruit;
     private int randomSpriteIndex;
     private float startPositionX;
     private float startPositionY;
@@ -39,11 +24,13 @@ public class Berry : MonoBehaviour
     private bool berrySpawned;
     private float currentTimeForScaling;
     private float currentTimeForMinimizing;
+    private Material particlesMaterial;
+    private ParticleSystem touchParticlesInstance;
+    private ParticleSystem wrongParticlesInstance;
 
     private const float SCALE_SPEED             = 1.7f;
     private const float MINIMIZE_SCALE_SPEED    = 2.0f;
     private const float RETURN_TIME             = 1.0f;
-    private const float BERRY_VFX_DELAY         = 1.0f;
     private const int BERRY_Z_POSITION          = 1;
     private const int MIN_RANDOM_INDEX          = 0;
     private const string BASKET_LAYER           = "Basket";
@@ -57,20 +44,26 @@ public class Berry : MonoBehaviour
         onHold = false;
         correctBasket = false;
 
-        maxRandomIndex = sprites.Length;
+        maxRandomIndex = fruit.sprites.Length;
         randomSpriteIndex = GetRandomIndex();
-        GetComponent<SpriteRenderer>().sprite = sprites[randomSpriteIndex];   
+        GetComponent<SpriteRenderer>().sprite = fruit.sprites[randomSpriteIndex];   
         berryCollider = GetComponent<Collider2D>();
         mainCamera = Camera.main;
 
         initialPosition = transform.position;
         initialScale = transform.localScale;
-        transform.localScale = Vector3.zero;    
+        transform.localScale = Vector3.zero;
+
+        particlesMaterial = new Material(fruit.berryVFXMaterial);
+        particlesMaterial.SetTexture(PROPERTY_TEXTURE, particleTexture);
+        touchParticlesInstance = Instantiate(fruit.touchParticles, transform.position, Quaternion.identity);
+        wrongParticlesInstance = Instantiate(fruit.wrongParticles, transform.position, transform.rotation);
+
+        touchParticlesInstance.GetComponent<ParticleSystemRenderer>().material = particlesMaterial;
     }
 
     private void Update()
     {
-
         MaximizeBerry();             
 
         if (onHold)
@@ -78,9 +71,7 @@ public class Berry : MonoBehaviour
             currentTime = 0;
             if (!letGo)
             {
-                berryVFXMaterial.SetTexture(PROPERTY_TEXTURE, particleTexture);
-                GameObject _touchParticlesInstance = (GameObject)Instantiate(touchParticles, transform.position, Quaternion.identity);
-                Destroy(_touchParticlesInstance, BERRY_VFX_DELAY);
+                touchParticlesInstance.Play();
 
                 letGo = true;
             }
@@ -134,7 +125,7 @@ public class Berry : MonoBehaviour
 
             if (_foundBasket != null)
             {
-                if (fruitType == _foundBasket.basketFruitType)
+                if (fruit.fruitType == _foundBasket.basket.basketFruitType)
                 {
                     correctBasket = true;
                     _foundBasket.AddBerry();
@@ -142,9 +133,9 @@ public class Berry : MonoBehaviour
                 }
                 else
                 {
-                    berryVFXMaterial.SetTexture(PROPERTY_TEXTURE, particleTexture);
-                    GameObject _wrongParticlesInstance = (GameObject)Instantiate(wrongParticles, transform.position, transform.rotation);
-                    Destroy(_wrongParticlesInstance, BERRY_VFX_DELAY);
+                    wrongParticlesInstance.transform.position = this.transform.position;
+                    wrongParticlesInstance.GetComponent<ParticleSystemRenderer>().material = particlesMaterial;
+                    wrongParticlesInstance.Play();
                 }
             }
         }
@@ -169,14 +160,14 @@ public class Berry : MonoBehaviour
     {
         currentTimeForScaling += Time.deltaTime;
         float _fraction = currentTimeForScaling / SCALE_SPEED;
-        var _step = animationCurve.Evaluate(_fraction);
+        var _step = fruit.animationCurve.Evaluate(_fraction);
         Vector3 _currentScale = Vector3.Lerp(Vector3.zero, initialScale, _step);
         transform.localScale = _currentScale;
     }
 
     private void MinimizeBerry()
     {
-       if(transform.localScale.x == 0)
+       if(transform.localScale.x <= 0)
        {
            Destroy(gameObject);
        }
