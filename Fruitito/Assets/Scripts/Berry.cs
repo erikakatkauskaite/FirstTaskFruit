@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Berry : MonoBehaviour
 {
+    public static event Action OnCollected;
     public FruitData fruit;
     private int randomSpriteIndex;
     private float startPositionX;
@@ -13,10 +15,7 @@ public class Berry : MonoBehaviour
     private int maxRandomIndex;
     private float currentSpeedValue;
     private Vector3 initialScale;
-    private float currentScaleValue;
-    private float currentScaleValue2;
     private bool correctBasket;
-    private bool berryMaximized;
     private bool letGo;
     private Texture particleTexture;
     private float currentTime;
@@ -129,7 +128,7 @@ public class Berry : MonoBehaviour
                 {
                     correctBasket = true;
                     _foundBasket.AddBerry();
-                    GameManager.Instance.CheckIfWon();
+                    OnCollected?.Invoke();
                 }
                 else
                 {
@@ -153,7 +152,7 @@ public class Berry : MonoBehaviour
 
     private int GetRandomIndex()
     {
-        return Random.Range(MIN_RANDOM_INDEX, maxRandomIndex);
+        return UnityEngine.Random.Range(MIN_RANDOM_INDEX, maxRandomIndex);
     }
 
     private void MaximizeBerry()

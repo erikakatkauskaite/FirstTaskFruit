@@ -4,14 +4,20 @@ public class UI : MonoBehaviour
 {
     [SerializeField]
     private GameObject restartButton;
+    [SerializeField]
+    private RectTransform barFill;
     private Vector3 initialScale;
     private bool won;
     private float currentScaleValue;
     private float currentScaleValue2;
     private bool restartPressed;
+    private Vector3 fillPosition;
 
     private const float SCALE_SPEED = 0.007f;
     private const int DEGREES       = 720;
+    private const int MIN_BERRIES = 0;
+    private const int MAX_BERRIES = 4;
+    private const float PROGRESS_BAR_END_VALUE = 0f;
 
     private void Start()
     {
@@ -20,6 +26,9 @@ public class UI : MonoBehaviour
         initialScale = restartButton.transform.localScale;
         restartButton.transform.localScale = Vector3.zero;
         restartButton.SetActive(false);
+        IncreaseProgress(GameManager.currentBerriesCount);
+        Berry.OnCollected += HandleBerryCollected;
+        GameManager.OnWin += SetWon;
     }
 
     private void Update()
@@ -32,6 +41,14 @@ public class UI : MonoBehaviour
         if(restartPressed)
         {
             MinimizeRestartButton();
+        }
+    }
+
+    public void HandleBerryCollected()
+    {
+        if (GameManager.currentBerriesCount <= MAX_BERRIES)
+        {
+            IncreaseProgress(GameManager.currentBerriesCount);
         }
     }
 
@@ -58,7 +75,7 @@ public class UI : MonoBehaviour
         }
     }
 
-    public void CheckIfWon()
+    public void SetWon()
     {
         won = true;
     }
@@ -66,5 +83,11 @@ public class UI : MonoBehaviour
     public void CheckIfPressedRestart()
     {
         restartPressed = true;
+    }
+
+    private void IncreaseProgress(int count)
+    {
+        fillPosition.x = GameManager.progressStartValue + (float)count / MAX_BERRIES * (PROGRESS_BAR_END_VALUE - GameManager.progressStartValue);
+        barFill.localPosition = fillPosition;
     }
 }

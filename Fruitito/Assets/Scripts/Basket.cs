@@ -1,9 +1,9 @@
 using UnityEngine;
+using System;
 
 public class Basket : MonoBehaviour
 {
-    [SerializeField]
-    private GameManager gameManager;
+    public static event Action OnBerryCollected;
     public BasketData basket;
 
     private const string PROPERTY_TEXTURE = "_MainTex";
@@ -14,6 +14,6 @@ public class Basket : MonoBehaviour
         basket.addedBerryVFX.GetComponent<ParticleSystemRenderer>().material = basket.particleMaterial;
         GameObject _addedBerryVFXInstance = Instantiate(basket.addedBerryVFX, transform.position, Quaternion.identity);
         Destroy(_addedBerryVFXInstance, ADDED_BERRY_VFX_DELAY);
-        gameManager.CountBerries();
+        OnBerryCollected?.Invoke();
     }
 }
