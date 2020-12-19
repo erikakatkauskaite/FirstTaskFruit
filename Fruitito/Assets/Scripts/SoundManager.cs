@@ -23,6 +23,12 @@ public class SoundManager : MonoBehaviour
         GameManager.OnWin += PlayWinSounds;
     }
 
+    private void OnDestroy()
+    {
+        Berry.OnCollected -= PlayCollectedSound;
+        GameManager.OnWin -= PlayWinSounds;
+    }
+
     private void PlayWinSounds()
     {
         Stop(BACKGROUND_SOUND);

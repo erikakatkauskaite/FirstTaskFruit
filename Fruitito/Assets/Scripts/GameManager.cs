@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
         CheckIfWon();
     }
 
+    private void OnDestroy()
+    {
+        Basket.OnBerryCollected -= CountBerriesAndCheckIfWon;
+    }
+
     public void CountBerries()
     {
         currentBerriesCount++;

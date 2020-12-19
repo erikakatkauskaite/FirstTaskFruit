@@ -33,6 +33,12 @@ public class UI : MonoBehaviour
         GameManager.OnWin += SetWon;
     }
 
+    private void OnDestroy()
+    {
+        Berry.OnCollected -= HandleBerryCollected;
+        GameManager.OnWin -= SetWon;
+    }
+
     private void Update()
     {
         if(won)
