@@ -12,15 +12,17 @@ public class UI : MonoBehaviour
     private float currentScaleValue2;
     private bool restartPressed;
     private Vector3 fillPosition;
+    private static float progressStartValue;
 
-    private const float SCALE_SPEED = 0.007f;
-    private const int DEGREES       = 720;
-    private const int MIN_BERRIES = 0;
-    private const int MAX_BERRIES = 4;
-    private const float PROGRESS_BAR_END_VALUE = 0f;
+    private const float SCALE_SPEED             = 0.007f;
+    private const int DEGREES                   = 720;
+    private const int MIN_BERRIES               = 0;
+    private const int MAX_BERRIES               = 4;
+    private const float PROGRESS_BAR_END_VALUE  = 0f;
 
     private void Start()
     {
+        progressStartValue = -barFill.rect.width;
         won = false;
         restartPressed = false;
         initialScale = restartButton.transform.localScale;
@@ -87,7 +89,7 @@ public class UI : MonoBehaviour
 
     private void IncreaseProgress(int count)
     {
-        fillPosition.x = GameManager.progressStartValue + (float)count / MAX_BERRIES * (PROGRESS_BAR_END_VALUE - GameManager.progressStartValue);
+        fillPosition.x = progressStartValue + (float)count / MAX_BERRIES * (PROGRESS_BAR_END_VALUE - progressStartValue);
         barFill.localPosition = fillPosition;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Berry : MonoBehaviour
 {
     public static event Action OnCollected;
-    public FruitData fruit;
+    public FruitData fruitData;
     private int randomSpriteIndex;
     private float startPositionX;
     private float startPositionY;
@@ -37,15 +37,15 @@ public class Berry : MonoBehaviour
 
     private void Start()
     {
-        particleTexture = GetComponent<SpriteRenderer>().sprite.texture;
+        //particleTexture = GetComponent<SpriteRenderer>().sprite.texture;
 
         letGo = false;
         onHold = false;
         correctBasket = false;
 
-        maxRandomIndex = fruit.sprites.Length;
+        maxRandomIndex = fruitData.sprites.Length;
         randomSpriteIndex = GetRandomIndex();
-        GetComponent<SpriteRenderer>().sprite = fruit.sprites[randomSpriteIndex];   
+        GetComponent<SpriteRenderer>().sprite = fruitData.sprites[randomSpriteIndex];   
         berryCollider = GetComponent<Collider2D>();
         mainCamera = Camera.main;
 
@@ -53,12 +53,8 @@ public class Berry : MonoBehaviour
         initialScale = transform.localScale;
         transform.localScale = Vector3.zero;
 
-        particlesMaterial = new Material(fruit.berryVFXMaterial);
-        particlesMaterial.SetTexture(PROPERTY_TEXTURE, particleTexture);
-        touchParticlesInstance = Instantiate(fruit.touchParticles, transform.position, Quaternion.identity);
-        wrongParticlesInstance = Instantiate(fruit.wrongParticles, transform.position, transform.rotation);
-
-        touchParticlesInstance.GetComponent<ParticleSystemRenderer>().material = particlesMaterial;
+        touchParticlesInstance = fruitData.touchParticles;
+        wrongParticlesInstance = fruitData.wrongParticles;
     }
 
     private void Update()
@@ -70,7 +66,8 @@ public class Berry : MonoBehaviour
             currentTime = 0;
             if (!letGo)
             {
-                touchParticlesInstance.Play();
+                touchParticlesInstance.GetComponent<ParticleSystemRenderer>().material = fruitData.berryVFXMaterial;
+                Instantiate(touchParticlesInstance, this.transform.position, Quaternion.identity);
 
                 letGo = true;
             }
@@ -124,7 +121,7 @@ public class Berry : MonoBehaviour
 
             if (_foundBasket != null)
             {
-                if (fruit.fruitType == _foundBasket.basket.basketFruitType)
+                if (fruitData.fruitType == _foundBasket.basket.basketFruitType)
                 {
                     correctBasket = true;
                     _foundBasket.AddBerry();
@@ -132,9 +129,8 @@ public class Berry : MonoBehaviour
                 }
                 else
                 {
-                    wrongParticlesInstance.transform.position = this.transform.position;
-                    wrongParticlesInstance.GetComponent<ParticleSystemRenderer>().material = particlesMaterial;
-                    wrongParticlesInstance.Play();
+                    wrongParticlesInstance.GetComponent<ParticleSystemRenderer>().material = fruitData.berryVFXMaterial;
+                    Instantiate(wrongParticlesInstance, this.transform.position, Quaternion.identity);
                 }
             }
         }
@@ -159,7 +155,7 @@ public class Berry : MonoBehaviour
     {
         currentTimeForScaling += Time.deltaTime;
         float _fraction = currentTimeForScaling / SCALE_SPEED;
-        var _step = fruit.animationCurve.Evaluate(_fraction);
+        var _step = fruitData.animationCurve.Evaluate(_fraction);
         Vector3 _currentScale = Vector3.Lerp(Vector3.zero, initialScale, _step);
         transform.localScale = _currentScale;
     }
