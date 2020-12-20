@@ -1414,8 +1414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccaf947091bcc9645ace6ff320ae55a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSettingsData: {fileID: 11400000, guid: 1f3ac3512e261674d863e35601c21df5, type: 2}
   berrySpawner: {fileID: 1472899407}
-  barFill: {fileID: 448093175}
 --- !u!4 &1821675348
 Transform:
   m_ObjectHideFlags: 0
@@ -1749,6 +1749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402577b2e00bbb9479003e8a1e08a3ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSettingsData: {fileID: 11400000, guid: 1f3ac3512e261674d863e35601c21df5, type: 2}
   restartButton: {fileID: 1884444576}
   barFill: {fileID: 448093175}
 --- !u!1 &2072190222

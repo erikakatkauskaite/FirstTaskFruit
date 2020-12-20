@@ -13,17 +13,11 @@ public class Berry : MonoBehaviour
     private Collider2D berryCollider;
     private Camera mainCamera;
     private int maxRandomIndex;
-    private float currentSpeedValue;
     private Vector3 initialScale;
     private bool correctBasket;
     private bool letGo;
-    private Texture particleTexture;
     private float currentTime;
     private Vector3 mouseUpPosition;
-    private bool berrySpawned;
-    private float currentTimeForScaling;
-    private float currentTimeForMinimizing;
-    private Material particlesMaterial;
     private ParticleSystem touchParticlesInstance;
     private ParticleSystem wrongParticlesInstance;
 
@@ -33,12 +27,9 @@ public class Berry : MonoBehaviour
     private const int BERRY_Z_POSITION          = 1;
     private const int MIN_RANDOM_INDEX          = 0;
     private const string BASKET_LAYER           = "Basket";
-    private const string PROPERTY_TEXTURE       = "_MainTex";
 
     private void Start()
     {
-        //particleTexture = GetComponent<SpriteRenderer>().sprite.texture;
-
         letGo = false;
         onHold = false;
         correctBasket = false;
@@ -55,12 +46,12 @@ public class Berry : MonoBehaviour
 
         touchParticlesInstance = fruitData.touchParticles;
         wrongParticlesInstance = fruitData.wrongParticles;
+
+        MaximizeBerry();
     }
 
     private void Update()
-    {
-        MaximizeBerry();             
-
+    {            
         if (onHold)
         {
             currentTime = 0;
@@ -70,31 +61,17 @@ public class Berry : MonoBehaviour
                 Instantiate(touchParticlesInstance, this.transform.position, Quaternion.identity);
 
                 letGo = true;
-            }
-            
+            }           
             Vector3 _mousePosition;
             _mousePosition = Input.mousePosition;
             _mousePosition = mainCamera.ScreenToWorldPoint(_mousePosition);
 
             gameObject.transform.localPosition = new Vector3(_mousePosition.x - startPositionX, _mousePosition.y - startPositionY, BERRY_Z_POSITION);
         }
-        else if(berrySpawned)
-        {
-            letGo = false;
-            if (correctBasket)
-            {
-                MinimizeBerry();
-            }
-            else
-            {
-                ReturnBerry();
-            }
-        }
     }
 
     private void OnMouseDown()
     {
-        berrySpawned = true;
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 _mousePosition;
@@ -123,6 +100,7 @@ public class Berry : MonoBehaviour
             {
                 if (fruitData.fruitType == _foundBasket.basket.basketFruitType)
                 {
+                    MinimizeBerry();
                     correctBasket = true;
                     _foundBasket.AddBerry();
                     OnCollected?.Invoke();
@@ -131,19 +109,20 @@ public class Berry : MonoBehaviour
                 {
                     wrongParticlesInstance.GetComponent<ParticleSystemRenderer>().material = fruitData.berryVFXMaterial;
                     Instantiate(wrongParticlesInstance, this.transform.position, Quaternion.identity);
+                    ReturnBerry();
                 }
             }
+        }
+        else
+        {
+            ReturnBerry();
         }
     }
 
     private void ReturnBerry()
     {
-        var _currentPosition = transform.position;
-        currentTime += Time.deltaTime;
-        float _fraction = currentTime / RETURN_TIME;
-        _currentPosition = Vector3.Lerp(mouseUpPosition, initialPosition, _fraction);
-        transform.position = _currentPosition;
-        
+        LeanTween.move(this.gameObject, initialPosition, RETURN_TIME);
+        letGo = false;
     }
 
     private int GetRandomIndex()
@@ -153,25 +132,16 @@ public class Berry : MonoBehaviour
 
     private void MaximizeBerry()
     {
-        currentTimeForScaling += Time.deltaTime;
-        float _fraction = currentTimeForScaling / SCALE_SPEED;
-        var _step = fruitData.animationCurve.Evaluate(_fraction);
-        Vector3 _currentScale = Vector3.Lerp(Vector3.zero, initialScale, _step);
-        transform.localScale = _currentScale;
+        LeanTween.scale(this.gameObject, initialScale, SCALE_SPEED).setEase(fruitData.animationCurve);
     }
 
     private void MinimizeBerry()
     {
-       if(transform.localScale.x <= 0)
-       {
-           Destroy(gameObject);
-       }
-       else
-       {
-            currentTimeForMinimizing += Time.deltaTime;
-            float _fraction = currentTimeForMinimizing / MINIMIZE_SCALE_SPEED;
-            Vector3 _currentScale = Vector3.Lerp(initialScale, Vector3.zero, _fraction);
-            transform.localScale = _currentScale;
-       }     
+        LeanTween.scale(this.gameObject, Vector2.zero, MINIMIZE_SCALE_SPEED).setOnComplete(DestroyBerry);
+    }
+
+    private void DestroyBerry()
+    {
+        Destroy(this.gameObject);
     }
 }

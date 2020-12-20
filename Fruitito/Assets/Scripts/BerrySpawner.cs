@@ -33,7 +33,7 @@ public class BerrySpawner : MonoBehaviour
         GameObject _newBerry = Instantiate(berryPrefabs[index]) as GameObject;
 
         _newBerry.transform.position = new Vector3(Random.Range(-screenBoundaries.x + BOUNDARIES_OFFSET_X, 
-            screenBoundaries.x - BOUNDARIES_OFFSET_X), Random.Range(BOUNDARIES_OFFSET_X, screenBoundaries.y - BOUNDARIES_OFFSET_Y), BERRY_Z_POSITION);
+        screenBoundaries.x - BOUNDARIES_OFFSET_X), Random.Range(BOUNDARIES_OFFSET_X, screenBoundaries.y - BOUNDARIES_OFFSET_Y), BERRY_Z_POSITION);
     }
 
     private void Update()

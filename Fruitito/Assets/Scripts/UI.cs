@@ -3,6 +3,8 @@
 public class UI : MonoBehaviour
 {
     [SerializeField]
+    private GameSettingsData gameSettingsData;
+    [SerializeField]
     private GameObject restartButton;
     [SerializeField]
     private RectTransform barFill;
@@ -16,8 +18,6 @@ public class UI : MonoBehaviour
 
     private const float SCALE_SPEED             = 0.007f;
     private const int DEGREES                   = 720;
-    private const int MIN_BERRIES               = 0;
-    private const int MAX_BERRIES               = 4;
     private const float PROGRESS_BAR_END_VALUE  = 0f;
 
     private void Start()
@@ -54,7 +54,7 @@ public class UI : MonoBehaviour
 
     public void HandleBerryCollected()
     {
-        if (GameManager.currentBerriesCount <= MAX_BERRIES)
+        if (GameManager.currentBerriesCount <= gameSettingsData.maxBerries)
         {
             IncreaseProgress(GameManager.currentBerriesCount);
         }
@@ -95,7 +95,7 @@ public class UI : MonoBehaviour
 
     private void IncreaseProgress(int count)
     {
-        fillPosition.x = progressStartValue + (float)count / MAX_BERRIES * (PROGRESS_BAR_END_VALUE - progressStartValue);
+        fillPosition.x = progressStartValue + (float)count / gameSettingsData.maxBerries * (PROGRESS_BAR_END_VALUE - progressStartValue);
         barFill.localPosition = fillPosition;
     }
 }
